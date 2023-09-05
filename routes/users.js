@@ -7,6 +7,7 @@ const Book = require('../models/Book');
 // Load User model
 const User = require('../models/User');
 const { forwardAuthenticated } = require('../config/auth');
+const regex = /@mnnit\.ac\.in$/;
 
 // Login Page
 router.get('/login', forwardAuthenticated, (req, res) => res.render('login'));
@@ -20,10 +21,13 @@ router.post('/register', (req, res) => {
 
   const { name, email, password, password2, number } = req.body;
   let errors = [];
-
+  
   if (!name || !email || !password || !password2 || !number) {
     errors.push({ msg: 'Please enter all fields' });
   }
+  if (!regex.test(email)) {
+    errors.push({ msg: 'Please register with MNNIT email address' });
+  } 
 
   if (password != password2) {
     errors.push({ msg: 'Passwords do not match' });
